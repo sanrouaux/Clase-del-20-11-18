@@ -528,9 +528,50 @@ LinkedList* ll_clone(LinkedList* this)
  */
 int ll_sort(LinkedList* this, int (*pFunc)(void*,void*), int order)
 {
-    int returnAux =-1;
+    int returnAux = -1;
+    if(this != NULL && pFunc != NULL && (order == 1 || order == 0))
+    {
+        returnAux = 0;
 
+        int r;
+        int i;
+        int j;
+        Node* pNodoUno = NULL;
+        Node* pNodoDos = NULL;
+        void* pAuxiliar = NULL;
+
+        for(i = 0; i < ll_len(this) - 1; i++)
+        {
+            pNodoUno = getNode(this, i);
+
+            for(j = i + 1; j < ll_len(this); j++)
+            {
+                pNodoDos = getNode(this, j);
+
+                r = pFunc(pNodoUno->pElement, pNodoDos->pElement); //La funcion criterio debe devolver [1] si el primer elemento es mayor al segundo,
+                                                                   // [-1] si el primer elemento es menor al segundo, y [0] si son iguales
+                if(r == 1)
+                {
+                    if(order == 1)
+                    {
+                        pAuxiliar = pNodoUno->pElement;
+                        pNodoUno->pElement = pNodoDos->pElement;
+                        pNodoDos->pElement = pAuxiliar;
+                    }
+                }
+
+                if(r == -1)
+                {
+                    if(order == 0)
+                    {
+                        pAuxiliar = pNodoUno->pElement;
+                        pNodoUno->pElement = pNodoDos->pElement;
+                        pNodoDos->pElement = pAuxiliar;
+                    }
+                }
+            }
+        }
+    }
     return returnAux;
-
 }
 
